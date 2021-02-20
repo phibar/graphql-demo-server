@@ -3,6 +3,7 @@ import { ApolloServer, gql } from 'apollo-server';
 const schema = gql`
     type Query {
         hello: String!
+        deployment: String!
     }
 `
 
