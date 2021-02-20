@@ -8,7 +8,7 @@
     "watch": [
         "src"
     ],
-    "exec": "npm start",
+    "exec": "npm run dev",
     "ext": "ts",
     "env": {}
 }

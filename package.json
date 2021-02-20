@@ -4,8 +4,9 @@
   "description": "",
   "main": "./src/server.ts",
   "scripts": {
-    "start": "ts-node -r dotenv/config ./src/server.ts",
-    "dev": "nodemon",
+    "start": "node dist/server",
+    "dev": "ts-node -r dotenv/config ./src/server.ts",
+    "dev:watch": "nodemon",
     "build": "tsc"
   },
   "dependencies": {
