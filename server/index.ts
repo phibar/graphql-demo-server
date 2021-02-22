@@ -8,21 +8,32 @@ import Textile from "./textile/textitle";
 
 dotenv.config();
 
-Textile.Instance().then(async(t)=>{
-  await t.reset();
-  await createDatabase(t);
+// Textile.Instance().then(async(t)=>{
+//   await t.reset();
+//   await createDatabase(t);
 
-  const server = new ApolloServer({
-    typeDefs: schema,
-    resolvers:resolvers,
-    introspection: true,
-    playground: true,
-    context: t
-  });
+//   const server = new ApolloServer({
+//     typeDefs: schema,
+//     resolvers:resolvers,
+//     introspection: true,
+//     playground: true,
+//     context: t
+//   });
 
-  server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
-    console.log(`🚀 Server ready at ${url}`);
-  });
-})
+//   server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+//     console.log(`🚀 Server ready at ${url}`);
+//   });
+// })
 
+
+const server = new ApolloServer({
+  typeDefs: schema,
+  resolvers:resolvers,
+  introspection: true,
+  playground: true
+});
+
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
+});
 
