@@ -15,7 +15,10 @@
     "apollo-server": "^2.21.0",
     "graphql": "^15.5.0",
     "graphql-2-json-schema": "git://github.com/phibar/graphql-to-json-schema.git#textile",
-    "graphql-import-node": "^0.0.4"
+    "graphql-import-node": "^0.0.4",
+    "@textile/hub": "^6.0.2",
+    "json-schema": "^0.3.0"
+
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.20.1",
