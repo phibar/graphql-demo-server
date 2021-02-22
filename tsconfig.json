@@ -58,6 +58,6 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "resolveJsonModule": true
   },
-  "include": ["server/**/*.ts"],
+  "include": ["server/**/*.ts","server/**/*.graphql"],
   "exclude": ["node_modules", ".vscode"]
 }
