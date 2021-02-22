@@ -1,21 +1,20 @@
 import './App.css'
 
 import React from 'react'
-
-import logo from './logo.svg'
+import { useMyVotesQuery } from './generated/generated-types'
+import { ListGroup, ListGroupItem } from 'react-bootstrap'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+      <ListGroup>
+        {useMyVotesQuery().data?.votes.map((v) => (
+          <ListGroupItem>
+            <h5>{v?.NFT}</h5>
+            {v?._id}
+          </ListGroupItem>
+        ))}
+      </ListGroup>
     </div>
   )
 }

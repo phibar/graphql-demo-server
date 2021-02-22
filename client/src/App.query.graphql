@@ -1,0 +1,6 @@
+query MyVotes {
+  votes {
+    NFT
+    _id
+  }
+}

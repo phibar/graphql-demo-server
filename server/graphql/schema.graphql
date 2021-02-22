@@ -1,6 +1,7 @@
 type Vote {
   _id:String!
   NFT: String!
+  test:String
 }
 
 type Query {
