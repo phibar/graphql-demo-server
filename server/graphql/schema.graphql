@@ -1,14 +1,15 @@
 type Vote {
-  _id:String!
+  _id: String!
   NFT: String!
-  test:String
+  test: String
 }
 
 type Query {
   votes: [Vote]!
-  vote(id:String): Vote
+  vote(id: String): Vote
 }
 
 type Mutation {
   createVote(NFT: String!): Vote!
+  deleteVote(id: String!): String
 }

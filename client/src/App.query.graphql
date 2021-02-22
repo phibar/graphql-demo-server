@@ -4,3 +4,14 @@ query MyVotes {
     _id
   }
 }
+
+mutation deleteVote($id: String!) {
+  deleteVote(id: $id)
+}
+
+mutation createVote($NFT:String!){
+  createVote(NFT:$NFT){
+    NFT
+    _id
+  }
+}

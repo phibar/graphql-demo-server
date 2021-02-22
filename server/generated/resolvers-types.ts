@@ -37,11 +37,17 @@ export type QueryVoteArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   createVote: Vote;
+  deleteVote?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationCreateVoteArgs = {
   NFT: Scalars['String'];
+};
+
+
+export type MutationDeleteVoteArgs = {
+  id: Scalars['String'];
 };
 
 export enum CacheControlScope {
@@ -169,6 +175,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createVote?: Resolver<ResolversTypes['Vote'], ParentType, ContextType, RequireFields<MutationCreateVoteArgs, 'NFT'>>;
+  deleteVote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDeleteVoteArgs, 'id'>>;
 }>;
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
