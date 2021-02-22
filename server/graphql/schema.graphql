@@ -1,0 +1,13 @@
+type Vote {
+  _id:String!
+  NFT: String!
+}
+
+type Query {
+  votes: [Vote]!
+  vote(id:String): Vote
+}
+
+type Mutation {
+  createVote(NFT: String!): Vote!
+}
