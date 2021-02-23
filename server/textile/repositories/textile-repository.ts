@@ -1,5 +1,5 @@
 import { PubSub } from 'apollo-server'
-import { Client, QueryJSON, ThreadID } from '@textile/hub'
+import { ThreadID } from '@textile/hub'
 import { v4 as uuid } from 'uuid'
 import Textile from '../textitle'
 interface TextileCollection {
