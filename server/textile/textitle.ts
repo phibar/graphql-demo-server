@@ -4,7 +4,7 @@ import { Client, CollectionConfig, PrivateKey, ThreadID } from '@textile/hub'
 export default class Textile {
   private static instance: Textile
 
-  private static async initInstance() {
+  private static async initInstance(create = false) {
     const identity = PrivateKey.fromString(process.env.APP_IDENTITY || '')
     const client = await Client.withKeyInfo({
       key: process.env.APP_API_KEY || '',
@@ -14,7 +14,7 @@ export default class Textile {
 
     const threadId = await this.createThreadIfNotExists(client)
     const collections = (await client.listCollections(threadId)).map((x) => x.name)
-    this.instance = new Textile(client, threadId, collections, new PubSub())
+    this.instance = new Textile(client, threadId, collections, new PubSub(), create)
   }
 
   private static async createThreadIfNotExists(client: Client) {
@@ -29,9 +29,9 @@ export default class Textile {
     return ThreadID.fromString(thread.id)
   }
 
-  static async Instance() {
+  static async Instance(create = false) {
     if (!this.instance) {
-      await Textile.initInstance()
+      await Textile.initInstance(create)
     }
     return this.instance
   }
@@ -41,30 +41,31 @@ export default class Textile {
   private collections: string[]
   private pubSub: PubSub
 
-  private constructor(client: Client, threadId: ThreadID, collections: string[], pubSub: PubSub) {
+  private constructor(client: Client, threadId: ThreadID, collections: string[], pubSub: PubSub, create = false) {
     this.client = client
     this.threadId = threadId
     this.collections = collections
     this.pubSub = pubSub
 
-    setTimeout(()=>this.hackRefreshCredentials(), 120 * 1000)
+    if (!create) setTimeout(() => this.hackRefreshCredentials(), 120 * 1000)
   }
 
   hackRefreshCredentials() {
+console.log("HACK")
     Client.withKeyInfo({
       key: process.env.APP_API_KEY || '',
       secret: process.env.APP_API_SECRET || ''
     }).then((client) => {
       this.client = client
     })
-    setTimeout(()=>this.hackRefreshCredentials(), 120 * 1000)
+    setTimeout(() => this.hackRefreshCredentials(), 120 * 1000)
   }
 
-  getRepository<T extends new (name: string, client: Client, threadID: ThreadID, pubSub: PubSub) => InstanceType<T>>(
+  getRepository<T extends new (name: string, textile: Textile, threadID: ThreadID, pubSub: PubSub) => InstanceType<T>>(
     constructor: T,
     name: string
   ) {
-    return new constructor(name, this.client, this.threadId, this.pubSub)
+    return new constructor(name, this, this.threadId, this.pubSub)
   }
 
   async newCollection(collectionConfig: CollectionConfig) {
@@ -98,6 +99,6 @@ export default class Textile {
       }
     }
     this.collections = []
-    return await Textile.Instance()
+    return await Textile.Instance(true)
   }
 }
