@@ -1,20 +1,25 @@
 import { PubSub } from 'apollo-server'
 import { Client, QueryJSON, ThreadID } from '@textile/hub'
 import { v4 as uuid } from 'uuid'
+import Textile from '../textitle'
 interface TextileCollection {
   _id: string
   __typename?: string
 }
 export default abstract class TextileRepository<T extends TextileCollection> {
   protected readonly collectionName: string
-  protected readonly client: Client
+  protected readonly textile: Textile
   protected readonly threadId: ThreadID
   protected readonly pubSub: PubSub
-  constructor(name: string, client: Client, threadID: ThreadID, pubSub: PubSub) {
+  constructor(name: string, textile: Textile, threadID: ThreadID, pubSub: PubSub) {
     this.collectionName = name
-    this.client = client
+    this.textile = textile
     this.threadId = threadID
     this.pubSub = pubSub
+  }
+
+  get client() {
+    return this.textile.client
   }
 
   async all() {

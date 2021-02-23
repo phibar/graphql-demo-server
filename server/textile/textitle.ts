@@ -36,7 +36,7 @@ export default class Textile {
     return this.instance
   }
 
-  private client: Client
+  client: Client
   private threadId: ThreadID
   private collections: string[]
   private pubSub: PubSub
@@ -46,6 +46,18 @@ export default class Textile {
     this.threadId = threadId
     this.collections = collections
     this.pubSub = pubSub
+
+    setTimeout(this.hackRefreshCredentials, 120 * 1000)
+  }
+
+  hackRefreshCredentials() {
+    Client.withKeyInfo({
+      key: process.env.APP_API_KEY || '',
+      secret: process.env.APP_API_SECRET || ''
+    }).then((client) => {
+      this.client = client
+    })
+    setTimeout(this.hackRefreshCredentials, 120 * 1000)
   }
 
   getRepository<T extends new (name: string, client: Client, threadID: ThreadID, pubSub: PubSub) => InstanceType<T>>(
