@@ -16,6 +16,7 @@
   "dependencies": {
     "@textile/hub": "^6.0.2",
     "apollo-server": "^2.21.0",
+    "change-case": "^4.1.2",
     "dotenv": "^8.2.0",
     "graphql": "^15.5.0",
     "graphql-2-json-schema": "git://github.com/phibar/graphql-to-json-schema.git#textile",

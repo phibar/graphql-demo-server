@@ -7,6 +7,7 @@ type User {
 type Meme {
   _id: String!
   name: String
+  owner: User
   NFT: String
 }
 
@@ -22,7 +23,8 @@ type Query {
 }
 
 type Mutation {
-  createMeme(name: String!): Meme!
+  createUser(name: String, wallet: String): String
+  createMeme(name: String!, ownerId: String): String
   deleteMeme(id: String!): String
 }
 

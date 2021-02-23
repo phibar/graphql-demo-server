@@ -1,16 +1,26 @@
-import { Meme, Vote } from './../generated/resolvers-types'
+import { Meme, User, Vote } from './../generated/resolvers-types'
 import { Client, CollectionConfig, PrivateKey, ThreadID } from '@textile/hub'
 
 export default class Textile {
+  async createUser(name: string | null | undefined, wallet: string | null | undefined) {
+    const user = { name, wallet }
+    const ids = await this.client.create(this.threadId, 'User', [user])
+    return ids[0]
+  }
+  async getOwner(_id: string): Promise<User | null> {
+    return _id
+      ? (await this.client.has(this.threadId, 'User', [_id]))
+        ? await this.client.findByID(this.threadId, 'User', _id)
+        : null
+      : null
+  }
   async deleteMeme(id: string): Promise<string> {
     await this.client.delete(this.threadId, 'Meme', [id])
     return id
   }
-  async createMeme(NFT: string): Promise<Meme> {
-    const meme: Meme = { _id: '', NFT }
-    const ids = await this.client.create(this.threadId, 'Meme', [meme])
-    meme._id = ids[0]
-    return meme
+  async createMeme(NFT: string, ownerId: string | null | undefined): Promise<string> {
+    const ids = await this.client.create(this.threadId, 'Meme', [{ NFT, ownerId }])
+    return ids[0]
   }
   async get<T>(collectionName: string): Promise<T[]> {
     return await this.client.find(this.threadId, collectionName, {})

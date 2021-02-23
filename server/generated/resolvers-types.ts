@@ -24,6 +24,7 @@ export type Meme = {
   __typename?: 'Meme';
   _id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
+  owner?: Maybe<User>;
   NFT?: Maybe<Scalars['String']>;
 };
 
@@ -42,13 +43,21 @@ export type Query = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createMeme: Meme;
+  createUser?: Maybe<Scalars['String']>;
+  createMeme?: Maybe<Scalars['String']>;
   deleteMeme?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationCreateUserArgs = {
+  name?: Maybe<Scalars['String']>;
+  wallet?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationCreateMemeArgs = {
   name: Scalars['String'];
+  ownerId?: Maybe<Scalars['String']>;
 };
 
 
@@ -173,6 +182,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type MemeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Meme'] = ResolversParentTypes['Meme']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   NFT?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -190,7 +200,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  createMeme?: Resolver<ResolversTypes['Meme'], ParentType, ContextType, RequireFields<MutationCreateMemeArgs, 'name'>>;
+  createUser?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, never>>;
+  createMeme?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateMemeArgs, 'name'>>;
   deleteMeme?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDeleteMemeArgs, 'id'>>;
 }>;
 
