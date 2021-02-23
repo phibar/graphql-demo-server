@@ -46,6 +46,16 @@ export default abstract class TextileRepository<T extends TextileCollection> {
     const trigger = uuid()
     this.client.listen(this.threadId, [{ actionTypes: [filter], collectionName: this.collectionName }], (reply) =>
       this.pubSub.publish(trigger, reply?.instance)
+      
+    )
+    return this.pubSub.asyncIterator(trigger)
+  }
+
+  private subscribeId(filter: string) {
+    const trigger = uuid()
+    this.client.listen(this.threadId, [{ actionTypes: [filter], collectionName: this.collectionName }], (reply) =>
+      this.pubSub.publish(trigger, reply?.instanceID)
+      
     )
     return this.pubSub.asyncIterator(trigger)
   }
@@ -54,6 +64,10 @@ export default abstract class TextileRepository<T extends TextileCollection> {
   }
 
   get subscribeDelete() {
-    return this.subscribe('DELETE')
+    return this.subscribeId('DELETE')
+  }
+
+  get subscribeSave() {
+    return this.subscribe('SAVE')
   }
 }
