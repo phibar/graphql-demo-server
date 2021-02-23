@@ -47,7 +47,7 @@ export default class Textile {
     this.collections = collections
     this.pubSub = pubSub
 
-    setTimeout(this.hackRefreshCredentials, 120 * 1000)
+    setTimeout(()=>this.hackRefreshCredentials(), 120 * 1000)
   }
 
   hackRefreshCredentials() {
@@ -57,7 +57,7 @@ export default class Textile {
     }).then((client) => {
       this.client = client
     })
-    setTimeout(this.hackRefreshCredentials, 120 * 1000)
+    setTimeout(()=>this.hackRefreshCredentials(), 120 * 1000)
   }
 
   getRepository<T extends new (name: string, client: Client, threadID: ThreadID, pubSub: PubSub) => InstanceType<T>>(
