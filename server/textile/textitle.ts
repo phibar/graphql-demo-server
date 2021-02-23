@@ -51,12 +51,13 @@ export default class Textile {
   }
 
   hackRefreshCredentials() {
-console.log("HACK")
     Client.withKeyInfo({
       key: process.env.APP_API_KEY || '',
       secret: process.env.APP_API_SECRET || ''
-    }).then((client) => {
+    }).then(async (client) => {
       this.client = client
+      const identity = PrivateKey.fromString(process.env.APP_IDENTITY || '')
+      await client.getToken(identity)
     })
     setTimeout(() => this.hackRefreshCredentials(), 120 * 1000)
   }
