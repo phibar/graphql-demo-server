@@ -10,7 +10,7 @@
     "start": "node dist/index.js",
     "dev": "ts-node -r dotenv/config ./server/index.ts",
     "dev:watch": "nodemon",
-    "build": "npm run clean && npm run generate:graphql && tsc && npm run copy-schema",
+    "build": "npm run clean && npm run generate:textile && tsc && npm run copy-schema",
     "clean": "rm -rf ./dist",
     "copy-schema": "cp ./server/graphql/schema.graphql ./dist/graphql/schema.graphql"
   },
