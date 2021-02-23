@@ -1,5 +1,5 @@
 import { PubSub } from 'apollo-server'
-import { Client, ThreadID } from '@textile/hub'
+import { Client, QueryJSON, ThreadID } from '@textile/hub'
 import { v4 as uuid } from 'uuid'
 interface TextileCollection {
   _id: string
@@ -29,6 +29,16 @@ export default abstract class TextileRepository<T extends TextileCollection> {
       : null
   }
 
+  async getMany(_ids: string[]): Promise<T[] | null> {
+    return _ids
+      ? await this.client.find<T>(this.threadId, this.collectionName, {
+          ors: _ids.map((id) => {
+            return { ands: [{ fieldPath: '_id', value: { string: id } }] }
+          })
+        })
+      : null
+  }
+
   async deleteById(_id: string): Promise<boolean> {
     try {
       await this.client.delete(this.threadId, this.collectionName, [_id])
@@ -46,7 +56,6 @@ export default abstract class TextileRepository<T extends TextileCollection> {
     const trigger = uuid()
     this.client.listen(this.threadId, [{ actionTypes: [filter], collectionName: this.collectionName }], (reply) =>
       this.pubSub.publish(trigger, reply?.instance)
-      
     )
     return this.pubSub.asyncIterator(trigger)
   }
@@ -55,7 +64,6 @@ export default abstract class TextileRepository<T extends TextileCollection> {
     const trigger = uuid()
     this.client.listen(this.threadId, [{ actionTypes: [filter], collectionName: this.collectionName }], (reply) =>
       this.pubSub.publish(trigger, reply?.instanceID)
-      
     )
     return this.pubSub.asyncIterator(trigger)
   }

@@ -22,7 +22,6 @@ export type User = {
   votes?: Maybe<Array<Maybe<Vote>>>;
 };
 
-/** Test */
 export type ReferenceInput = {
   _id: Scalars['String'];
 };
@@ -112,6 +111,11 @@ export type Subscription = {
   __typename?: 'Subscription';
   memeAdded?: Maybe<Meme>;
   memeDeleted?: Maybe<Scalars['String']>;
+  memeVoted?: Maybe<Meme>;
+  voteAdded?: Maybe<Vote>;
+  voteDeleted?: Maybe<Scalars['String']>;
+  userAdded?: Maybe<User>;
+  userDeleted?: Maybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -269,6 +273,11 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   memeAdded?: SubscriptionResolver<Maybe<ResolversTypes['Meme']>, "memeAdded", ParentType, ContextType>;
   memeDeleted?: SubscriptionResolver<Maybe<ResolversTypes['String']>, "memeDeleted", ParentType, ContextType>;
+  memeVoted?: SubscriptionResolver<Maybe<ResolversTypes['Meme']>, "memeVoted", ParentType, ContextType>;
+  voteAdded?: SubscriptionResolver<Maybe<ResolversTypes['Vote']>, "voteAdded", ParentType, ContextType>;
+  voteDeleted?: SubscriptionResolver<Maybe<ResolversTypes['String']>, "voteDeleted", ParentType, ContextType>;
+  userAdded?: SubscriptionResolver<Maybe<ResolversTypes['User']>, "userAdded", ParentType, ContextType>;
+  userDeleted?: SubscriptionResolver<Maybe<ResolversTypes['String']>, "userDeleted", ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{

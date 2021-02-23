@@ -1,0 +1,34 @@
+query users {
+  users {
+    _id
+    name
+    wallet
+    memes {
+      _id
+    }
+    votes {
+      _id
+    }
+  }
+}
+
+mutation deleteUser($id: String!) {
+  deleteUser(id: $id)
+}
+
+subscription userDeleted {
+  userDeleted
+}
+subscription userAdded {
+  userAdded {
+    _id
+    name
+    wallet
+    memes {
+      _id
+    }
+    votes {
+      _id
+    }
+  }
+}

@@ -1,0 +1,34 @@
+query votes {
+  votes {
+    _id
+    meme {
+      _id
+      name
+    }
+    user {
+      _id
+      name
+    }
+  }
+}
+
+mutation deleteVote($id: String!) {
+  deleteVote(id: $id)
+}
+
+subscription voteDeleted {
+  voteDeleted
+}
+subscription voteAdded {
+  voteAdded {
+    _id
+    meme {
+      _id
+      name
+    }
+    user {
+      _id
+      name
+    }
+  }
+}

@@ -1,0 +1,3 @@
+mutation createMeme($meme: MemeCreateInput! ) {
+  createMeme(meme: $meme)
+}

@@ -59,4 +59,11 @@ type Mutation {
 type Subscription {
   memeAdded: Meme
   memeDeleted: String
+  memeVoted: Meme
+
+  voteAdded: Vote
+  voteDeleted: String
+
+  userAdded: User
+  userDeleted: String
 }

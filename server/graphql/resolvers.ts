@@ -1,4 +1,4 @@
-import { Meme, Resolvers, User } from '../generated/resolvers-types'
+import { Meme, Resolvers, User, Vote } from '../generated/resolvers-types'
 import { ResolverContext } from './resolver-context'
 
 export const resolvers: Resolvers<ResolverContext> = {
@@ -24,10 +24,32 @@ export const resolvers: Resolvers<ResolverContext> = {
     memeDeleted: {
       subscribe: (_p, _a, c) => c.Meme.subscribeDelete,
       resolve: (v: string) => v
+    },
+    memeVoted: {
+      subscribe: (_p, _a, c) => c.Meme.subscribeVoted,
+      resolve: (v: Meme) => v
+    },
+    userAdded: {
+      subscribe: (_p, _a, c) => c.User.subscribeCreate,
+      resolve: (v: User) => v
+    },
+    userDeleted: {
+      subscribe: (_p, _a, c) => c.User.subscribeDelete,
+      resolve: (v: string) => v
+    },
+
+    voteAdded: {
+      subscribe: (_p, _a, c) => c.Vote.subscribeCreate,
+      resolve: (v: Vote) => v
+    },
+    voteDeleted: {
+      subscribe: (_p, _a, c) => c.Vote.subscribeDelete,
+      resolve: (v: string) => v
     }
   },
   Meme: {
-    owner: async (parent, _args, c) => await c.User.getById(parent.owner?._id)
+    owner: async (parent, _args, c) => await c.User.getById(parent.owner?._id),
+    votes: async (parent, _args, c) => await (await c.Vote.all()).filter(x=>x.meme._id===parent._id)
   },
   Vote: {
     meme: async (p, _a, c) => await (c.Meme.getById(p.meme._id) as Promise<Meme>),

@@ -1,0 +1,30 @@
+query users {
+  users {
+    _id
+    name
+    wallet
+    memes {
+      _id
+    }
+    votes {
+      _id
+    }
+  }
+}
+
+subscription userDeleted {
+  userDeleted
+}
+subscription userAdded {
+  userAdded {
+    _id
+    name
+    wallet
+    memes {
+      _id
+    }
+    votes {
+      _id
+    }
+  }
+}

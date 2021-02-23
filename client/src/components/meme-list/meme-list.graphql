@@ -1,0 +1,51 @@
+query memes {
+  memes {
+    _id
+    name
+    owner {
+      name
+    }
+    votes {
+      _id
+    }
+    nft
+    price
+  }
+}
+
+mutation deleteMeme($id: String!) {
+  deleteMeme(id: $id)
+}
+
+subscription memeDeleted {
+  memeDeleted
+}
+subscription memeAdded {
+  memeAdded {
+    _id
+    name
+    owner {
+      name
+    }
+    votes {
+      _id
+    }
+    nft
+    price
+  }
+}
+
+subscription memeVoted {
+  memeVoted {
+    _id
+    name
+    owner {
+      name
+    }
+    votes {
+      _id
+    }
+    nft
+    price
+  }
+}
