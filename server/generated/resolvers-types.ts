@@ -1,129 +1,135 @@
-import { GraphQLResolveInfo } from 'graphql'
-export type Maybe<T> = T | null
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
-  { [P in K]-?: NonNullable<T[P]> }
+import { GraphQLResolveInfo } from 'graphql';
+export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string
-  String: string
-  Boolean: boolean
-  Int: number
-  Float: number
-}
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
+};
+
+export type User = {
+  __typename?: 'User';
+  _id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  wallet?: Maybe<Scalars['String']>;
+};
+
+export type Meme = {
+  __typename?: 'Meme';
+  _id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  NFT?: Maybe<Scalars['String']>;
+};
 
 export type Vote = {
-  __typename?: 'Vote'
-  _id: Scalars['String']
-  NFT: Scalars['String']
-  test?: Maybe<Scalars['String']>
-}
+  __typename?: 'Vote';
+  _id: Scalars['String'];
+  NFT: Scalars['String'];
+};
 
 export type Query = {
-  __typename?: 'Query'
-  votes: Array<Maybe<Vote>>
-  vote?: Maybe<Vote>
-}
-
-export type QueryVoteArgs = {
-  id?: Maybe<Scalars['String']>
-}
+  __typename?: 'Query';
+  votes?: Maybe<Array<Maybe<Vote>>>;
+  users?: Maybe<Array<Maybe<User>>>;
+  memes?: Maybe<Array<Maybe<Meme>>>;
+};
 
 export type Mutation = {
-  __typename?: 'Mutation'
-  createVote: Vote
-  deleteVote?: Maybe<Scalars['String']>
-}
+  __typename?: 'Mutation';
+  createMeme: Meme;
+  deleteMeme?: Maybe<Scalars['String']>;
+};
 
-export type MutationCreateVoteArgs = {
-  NFT: Scalars['String']
-}
 
-export type MutationDeleteVoteArgs = {
-  id: Scalars['String']
-}
+export type MutationCreateMemeArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationDeleteMemeArgs = {
+  id: Scalars['String'];
+};
 
 export type Subscription = {
-  __typename?: 'Subscription'
-  voteAdded?: Maybe<Vote>
-  voteDeleted?: Maybe<Scalars['String']>
-}
+  __typename?: 'Subscription';
+  memeAdded?: Maybe<Meme>;
+  memeDeleted?: Maybe<Scalars['String']>;
+};
 
-export type WithIndex<TObject> = TObject & Record<string, any>
-export type ResolversObject<TObject> = WithIndex<TObject>
+export type WithIndex<TObject> = TObject & Record<string, any>;
+export type ResolversObject<TObject> = WithIndex<TObject>;
 
-export type ResolverTypeWrapper<T> = Promise<T> | T
+export type ResolverTypeWrapper<T> = Promise<T> | T;
+
 
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>
-}
+  fragment: string;
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
 
 export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  selectionSet: string
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>
-}
-export type StitchingResolver<TResult, TParent, TContext, TArgs> =
-  | LegacyStitchingResolver<TResult, TParent, TContext, TArgs>
-  | NewStitchingResolver<TResult, TParent, TContext, TArgs>
+  selectionSet: string;
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
-  | StitchingResolver<TResult, TParent, TContext, TArgs>
+  | StitchingResolver<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => Promise<TResult> | TResult
+) => Promise<TResult> | TResult;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>
+) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => TResult | Promise<TResult>
+) => TResult | Promise<TResult>;
 
 export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
-  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>
-  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
 
 export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
-  subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs>
-  resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>
+  subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs>;
+  resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
 }
 
 export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
-  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>
+  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
 export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
-  | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>
+  | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   parent: TParent,
   context: TContext,
   info: GraphQLResolveInfo
-) => Maybe<TTypes> | Promise<Maybe<TTypes>>
+) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
-  obj: T,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => boolean | Promise<boolean>
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
-export type NextResolverFn<T> = () => Promise<T>
+export type NextResolverFn<T> = () => Promise<T>;
 
 export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
   next: NextResolverFn<TResult>,
@@ -131,76 +137,80 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => TResult | Promise<TResult>
+) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Vote: ResolverTypeWrapper<Vote>
-  String: ResolverTypeWrapper<Scalars['String']>
-  Query: ResolverTypeWrapper<{}>
-  Mutation: ResolverTypeWrapper<{}>
-  Subscription: ResolverTypeWrapper<{}>
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
-}>
+  User: ResolverTypeWrapper<User>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  Meme: ResolverTypeWrapper<Meme>;
+  Vote: ResolverTypeWrapper<Vote>;
+  Query: ResolverTypeWrapper<{}>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Subscription: ResolverTypeWrapper<{}>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+}>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Vote: Vote
-  String: Scalars['String']
-  Query: {}
-  Mutation: {}
-  Subscription: {}
-  Boolean: Scalars['Boolean']
-}>
+  User: User;
+  String: Scalars['String'];
+  Meme: Meme;
+  Vote: Vote;
+  Query: {};
+  Mutation: {};
+  Subscription: {};
+  Boolean: Scalars['Boolean'];
+}>;
 
-export type VoteResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Vote'] = ResolversParentTypes['Vote']
-> = ResolversObject<{
-  _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  NFT?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  test?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}>
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  _id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  wallet?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
-export type QueryResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
-> = ResolversObject<{
-  votes?: Resolver<Array<Maybe<ResolversTypes['Vote']>>, ParentType, ContextType>
-  vote?: Resolver<Maybe<ResolversTypes['Vote']>, ParentType, ContextType, RequireFields<QueryVoteArgs, never>>
-}>
+export type MemeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Meme'] = ResolversParentTypes['Meme']> = ResolversObject<{
+  _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  NFT?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
-export type MutationResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
-> = ResolversObject<{
-  createVote?: Resolver<ResolversTypes['Vote'], ParentType, ContextType, RequireFields<MutationCreateVoteArgs, 'NFT'>>
-  deleteVote?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteVoteArgs, 'id'>
-  >
-}>
+export type VoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Vote'] = ResolversParentTypes['Vote']> = ResolversObject<{
+  _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  NFT?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
-export type SubscriptionResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
-> = ResolversObject<{
-  voteAdded?: SubscriptionResolver<Maybe<ResolversTypes['Vote']>, 'voteAdded', ParentType, ContextType>
-  voteDeleted?: SubscriptionResolver<Maybe<ResolversTypes['String']>, 'voteDeleted', ParentType, ContextType>
-}>
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  votes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Vote']>>>, ParentType, ContextType>;
+  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  memes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Meme']>>>, ParentType, ContextType>;
+}>;
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createMeme?: Resolver<ResolversTypes['Meme'], ParentType, ContextType, RequireFields<MutationCreateMemeArgs, 'name'>>;
+  deleteMeme?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDeleteMemeArgs, 'id'>>;
+}>;
+
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  memeAdded?: SubscriptionResolver<Maybe<ResolversTypes['Meme']>, "memeAdded", ParentType, ContextType>;
+  memeDeleted?: SubscriptionResolver<Maybe<ResolversTypes['String']>, "memeDeleted", ParentType, ContextType>;
+}>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
-  Vote?: VoteResolvers<ContextType>
-  Query?: QueryResolvers<ContextType>
-  Mutation?: MutationResolvers<ContextType>
-  Subscription?: SubscriptionResolvers<ContextType>
-}>
+  User?: UserResolvers<ContextType>;
+  Meme?: MemeResolvers<ContextType>;
+  Vote?: VoteResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+}>;
+
 
 /**
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>
+export type IResolvers<ContextType = any> = Resolvers<ContextType>;

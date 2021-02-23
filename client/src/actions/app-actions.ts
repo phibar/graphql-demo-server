@@ -1,16 +1,17 @@
-import { AppAction } from "../enums/app-action"
-import { Maybe, Vote } from "../generated/generated-types"
-import { IAction } from "../interfaces/action"
+import { AppAction } from '../enums/app-action'
+import { Maybe, Meme } from '../generated/generated-types'
+import { IAction } from '../interfaces/action'
 
 type VotesLoadedAction = IAction<
-  AppAction.VotesLoaded,
+  AppAction.MemesLoaded,
+
   Maybe<
     {
-      __typename?: 'Vote' | undefined
-    } & Pick<Vote, 'NFT' | '_id'>
+      __typename?: 'Meme' | undefined
+    } & Pick<Meme, '_id' | 'name' | 'NFT'>
   >[]
 >
-type VotesDeletedAction = IAction<AppAction.VoteDeleted, string>
-type VoteAddedAction = IAction<AppAction.VoteAdded, Vote>
+type VotesDeletedAction = IAction<AppAction.MemeDeleted, string>
+type VoteAddedAction = IAction<AppAction.MemeAdded, Meme>
 
 export type AppActions = VotesLoadedAction | VotesDeletedAction | VoteAddedAction

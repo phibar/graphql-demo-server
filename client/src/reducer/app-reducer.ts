@@ -8,12 +8,12 @@ export const initState: IAppState = {
 
 export const appReducer = (state: IAppState = initState, action: AppActions): IAppState => {
   switch (action.type) {
-    case AppAction.VotesLoaded:
+    case AppAction.MemesLoaded:
       console.log('LOADED', action.payload)
       return { ...state, votes: action.payload }
-    case AppAction.VoteAdded:
+    case AppAction.MemeAdded:
       return { ...state, votes: [...state.votes, action.payload] }
-    case AppAction.VoteDeleted:
+    case AppAction.MemeDeleted:
       return { ...state, votes: state.votes.filter((v) => v && v._id !== action.payload) }
   }
 }

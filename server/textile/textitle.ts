@@ -1,23 +1,19 @@
-import { Vote } from './../generated/resolvers-types'
+import { Meme, Vote } from './../generated/resolvers-types'
 import { Client, CollectionConfig, PrivateKey, ThreadID } from '@textile/hub'
 
 export default class Textile {
-  async deleteVote(id: string): Promise<string> {
-    await this.client.delete(this.threadId, 'Vote', [id])
+  async deleteMeme(id: string): Promise<string> {
+    await this.client.delete(this.threadId, 'Meme', [id])
     return id
   }
-  async createVote(NFT: string): Promise<Vote> {
-    const vote: Vote = { _id: '', NFT }
-    const ids = await this.client.create(this.threadId, 'Vote', [vote])
-    vote._id = ids[0]
-    return vote
+  async createMeme(NFT: string): Promise<Meme> {
+    const meme: Meme = { _id: '', NFT }
+    const ids = await this.client.create(this.threadId, 'Meme', [meme])
+    meme._id = ids[0]
+    return meme
   }
   async get<T>(collectionName: string): Promise<T[]> {
     return await this.client.find(this.threadId, collectionName, {})
-  }
-
-  async getSingleById<T>(collectionName: string, id: string): Promise<T> {
-    return await this.client.findByID<T>(this.threadId, collectionName, id)
   }
 
   private static instance: Textile
@@ -66,13 +62,6 @@ export default class Textile {
       await this.client.newCollection(this.threadId, collectionConfig)
       this.collections = (await this.client.listCollections(this.threadId)).map((x) => x.name)
     }
-  }
-
-  async test() {
-    console.log('TEST')
-    await this.client.create(this.threadId, 'Vote', [{ NFT: 'test' }])
-    const foo = await this.client.find(this.threadId, 'Vote', {})
-    console.log('FOOOO', foo)
   }
 
   async reset() {

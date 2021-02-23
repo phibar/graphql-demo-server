@@ -1,5 +1,5 @@
 export enum AppAction {
-  VotesLoaded,
-  VoteDeleted,
-  VoteAdded
+  MemesLoaded,
+  MemeDeleted,
+  MemeAdded
 }

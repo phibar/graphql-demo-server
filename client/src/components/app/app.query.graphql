@@ -1,28 +1,31 @@
-query MyVotes {
-  votes {
+query Memes {
+  memes {
+    _id
+    name
     NFT
+  }
+}
+
+mutation deleteMeme($id: String!) {
+  deleteMeme(id: $id)
+}
+
+mutation createMeme($name: String!) {
+  createMeme(name: $name) {
+    NFT
+    name
     _id
   }
 }
 
-mutation deleteVote($id: String!) {
-  deleteVote(id: $id)
+subscription memeDeleted {
+  memeDeleted
 }
 
-mutation createVote($NFT: String!) {
-  createVote(NFT: $NFT) {
-    NFT
-    _id
-  }
-}
-
-subscription voteDeleted {
-  voteDeleted
-}
-
-subscription voteAdded {
-  voteAdded {
+subscription memeAdded {
+  memeAdded {
     _id
     NFT
+    name
   }
 }

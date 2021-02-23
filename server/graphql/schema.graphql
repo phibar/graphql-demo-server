@@ -1,20 +1,32 @@
+type User {
+  _id: String
+  name: String
+  wallet: String
+}
+
+type Meme {
+  _id: String!
+  name: String
+  NFT: String
+}
+
 type Vote {
   _id: String!
   NFT: String!
-  test: String
 }
 
 type Query {
-  votes: [Vote]!
-  vote(id: String): Vote
+  votes: [Vote]
+  users: [User]
+  memes: [Meme]
 }
 
 type Mutation {
-  createVote(NFT: String!): Vote!
-  deleteVote(id: String!): String
+  createMeme(name: String!): Meme!
+  deleteMeme(id: String!): String
 }
 
 type Subscription {
-  voteAdded: Vote
-  voteDeleted: String
+  memeAdded: Meme
+  memeDeleted: String
 }

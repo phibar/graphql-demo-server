@@ -1,38 +1,39 @@
 import React, { useEffect, useReducer, useState } from 'react'
-import {
-  useMyVotesQuery,
-  useDeleteVoteMutation,
-  useCreateVoteMutation,
-  useVoteAddedSubscription,
-  useVoteDeletedSubscription
-} from '../../generated/generated-types'
+
 import { Button, Col, Container, FormControl, InputGroup, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
 import { appReducer, initState } from '../../reducer/app-reducer'
 import { AppAction } from '../../enums/app-action'
+import {
+  useCreateMemeMutation,
+  useDeleteMemeMutation,
+  useMemeAddedSubscription,
+  useMemeDeletedSubscription,
+  useMemesQuery
+} from '../../generated/generated-types'
 
 function App() {
-  const [deleteVoteMutation] = useDeleteVoteMutation()
-  const [createVoteMutation] = useCreateVoteMutation()
+  const [deleteVoteMutation] = useDeleteMemeMutation()
+  const [createVoteMutation] = useCreateMemeMutation()
 
   const [newValue, setNewValue] = useState<string>('')
 
   const [appState, dispatch] = useReducer(appReducer, initState)
 
-  const { data: votes, loading: votesLoading, error: votesError } = useMyVotesQuery()
-  const { data: added } = useVoteAddedSubscription()
-  const { data: deleted } = useVoteDeletedSubscription()
+  const { data: memes, loading: memesLoading, error: memesError } = useMemesQuery()
+  const { data: memeAdded } = useMemeAddedSubscription()
+  const { data: memeDeleted } = useMemeDeletedSubscription()
 
   useEffect(() => {
-    votes && votes.votes && dispatch({ type: AppAction.VotesLoaded, payload: votes.votes })
-  }, [votes])
+    memes && memes.memes && dispatch({ type: AppAction.MemesLoaded, payload: memes.memes })
+  }, [memes])
 
   useEffect(() => {
-    added && added.voteAdded && dispatch({ type: AppAction.VoteAdded, payload: added.voteAdded })
-  }, [added])
+    memeAdded && memeAdded.memeAdded && dispatch({ type: AppAction.MemeAdded, payload: memeAdded.memeAdded })
+  }, [memeAdded])
 
   useEffect(() => {
-    deleted && deleted.voteDeleted && dispatch({ type: AppAction.VoteDeleted, payload: deleted.voteDeleted })
-  }, [deleted])
+    memeDeleted && memeDeleted.memeDeleted && dispatch({ type: AppAction.MemeDeleted, payload: memeDeleted.memeDeleted })
+  }, [memeDeleted])
 
   return (
     <div className="App">
@@ -51,7 +52,7 @@ function App() {
           </InputGroup>
           <Button
             onClick={() => {
-              newValue && createVoteMutation({ variables: { NFT: newValue } })
+              newValue && createVoteMutation({ variables: { name: newValue } })
             }}
           >
             neu
@@ -59,10 +60,10 @@ function App() {
         </Row>
         <Row>
           <Col>
-            <h2>Votes (onload)</h2>
+            <h2>Memes</h2>
             <ListGroup>
-              {votesLoading && <ListGroupItem>Data is loading...</ListGroupItem>}
-              {votesError && <ListGroupItem>{votesError.message}</ListGroupItem>}
+              {memesLoading && <ListGroupItem>Data is loading...</ListGroupItem>}
+              {memesError && <ListGroupItem>{memesError.message}</ListGroupItem>}
               {appState?.votes.map((v) => (
                 <ListGroupItem key={v?._id}>
                   <h5>{v?.NFT}</h5>

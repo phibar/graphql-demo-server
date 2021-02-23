@@ -13,248 +13,260 @@ export type Scalars = {
   Float: number;
 };
 
+export type User = {
+  __typename?: 'User';
+  _id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  wallet?: Maybe<Scalars['String']>;
+};
+
+export type Meme = {
+  __typename?: 'Meme';
+  _id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  NFT?: Maybe<Scalars['String']>;
+};
+
 export type Vote = {
   __typename?: 'Vote';
   _id: Scalars['String'];
   NFT: Scalars['String'];
-  test?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  votes: Array<Maybe<Vote>>;
-  vote?: Maybe<Vote>;
-};
-
-
-export type QueryVoteArgs = {
-  id?: Maybe<Scalars['String']>;
+  votes?: Maybe<Array<Maybe<Vote>>>;
+  users?: Maybe<Array<Maybe<User>>>;
+  memes?: Maybe<Array<Maybe<Meme>>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createVote: Vote;
-  deleteVote?: Maybe<Scalars['String']>;
+  createMeme: Meme;
+  deleteMeme?: Maybe<Scalars['String']>;
 };
 
 
-export type MutationCreateVoteArgs = {
-  NFT: Scalars['String'];
+export type MutationCreateMemeArgs = {
+  name: Scalars['String'];
 };
 
 
-export type MutationDeleteVoteArgs = {
+export type MutationDeleteMemeArgs = {
   id: Scalars['String'];
 };
 
 export type Subscription = {
   __typename?: 'Subscription';
-  voteAdded?: Maybe<Vote>;
-  voteDeleted?: Maybe<Scalars['String']>;
+  memeAdded?: Maybe<Meme>;
+  memeDeleted?: Maybe<Scalars['String']>;
 };
 
-export type MyVotesQueryVariables = Exact<{ [key: string]: never; }>;
+export type MemesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyVotesQuery = (
+export type MemesQuery = (
   { __typename?: 'Query' }
-  & { votes: Array<Maybe<(
-    { __typename?: 'Vote' }
-    & Pick<Vote, 'NFT' | '_id'>
-  )>> }
+  & { memes?: Maybe<Array<Maybe<(
+    { __typename?: 'Meme' }
+    & Pick<Meme, '_id' | 'name' | 'NFT'>
+  )>>> }
 );
 
-export type DeleteVoteMutationVariables = Exact<{
+export type DeleteMemeMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type DeleteVoteMutation = (
+export type DeleteMemeMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deleteVote'>
+  & Pick<Mutation, 'deleteMeme'>
 );
 
-export type CreateVoteMutationVariables = Exact<{
-  NFT: Scalars['String'];
+export type CreateMemeMutationVariables = Exact<{
+  name: Scalars['String'];
 }>;
 
 
-export type CreateVoteMutation = (
+export type CreateMemeMutation = (
   { __typename?: 'Mutation' }
-  & { createVote: (
-    { __typename?: 'Vote' }
-    & Pick<Vote, 'NFT' | '_id'>
+  & { createMeme: (
+    { __typename?: 'Meme' }
+    & Pick<Meme, 'NFT' | 'name' | '_id'>
   ) }
 );
 
-export type VoteDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+export type MemeDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type VoteDeletedSubscription = (
+export type MemeDeletedSubscription = (
   { __typename?: 'Subscription' }
-  & Pick<Subscription, 'voteDeleted'>
+  & Pick<Subscription, 'memeDeleted'>
 );
 
-export type VoteAddedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+export type MemeAddedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type VoteAddedSubscription = (
+export type MemeAddedSubscription = (
   { __typename?: 'Subscription' }
-  & { voteAdded?: Maybe<(
-    { __typename?: 'Vote' }
-    & Pick<Vote, '_id' | 'NFT'>
+  & { memeAdded?: Maybe<(
+    { __typename?: 'Meme' }
+    & Pick<Meme, '_id' | 'NFT' | 'name'>
   )> }
 );
 
 
-export const MyVotesDocument = gql`
-    query MyVotes {
-  votes {
-    NFT
+export const MemesDocument = gql`
+    query Memes {
+  memes {
     _id
+    name
+    NFT
   }
 }
     `;
 
 /**
- * __useMyVotesQuery__
+ * __useMemesQuery__
  *
- * To run a query within a React component, call `useMyVotesQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyVotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMemesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMemesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMyVotesQuery({
+ * const { data, loading, error } = useMemesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMyVotesQuery(baseOptions?: Apollo.QueryHookOptions<MyVotesQuery, MyVotesQueryVariables>) {
-        return Apollo.useQuery<MyVotesQuery, MyVotesQueryVariables>(MyVotesDocument, baseOptions);
+export function useMemesQuery(baseOptions?: Apollo.QueryHookOptions<MemesQuery, MemesQueryVariables>) {
+        return Apollo.useQuery<MemesQuery, MemesQueryVariables>(MemesDocument, baseOptions);
       }
-export function useMyVotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyVotesQuery, MyVotesQueryVariables>) {
-          return Apollo.useLazyQuery<MyVotesQuery, MyVotesQueryVariables>(MyVotesDocument, baseOptions);
+export function useMemesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MemesQuery, MemesQueryVariables>) {
+          return Apollo.useLazyQuery<MemesQuery, MemesQueryVariables>(MemesDocument, baseOptions);
         }
-export type MyVotesQueryHookResult = ReturnType<typeof useMyVotesQuery>;
-export type MyVotesLazyQueryHookResult = ReturnType<typeof useMyVotesLazyQuery>;
-export type MyVotesQueryResult = Apollo.QueryResult<MyVotesQuery, MyVotesQueryVariables>;
-export const DeleteVoteDocument = gql`
-    mutation deleteVote($id: String!) {
-  deleteVote(id: $id)
+export type MemesQueryHookResult = ReturnType<typeof useMemesQuery>;
+export type MemesLazyQueryHookResult = ReturnType<typeof useMemesLazyQuery>;
+export type MemesQueryResult = Apollo.QueryResult<MemesQuery, MemesQueryVariables>;
+export const DeleteMemeDocument = gql`
+    mutation deleteMeme($id: String!) {
+  deleteMeme(id: $id)
 }
     `;
-export type DeleteVoteMutationFn = Apollo.MutationFunction<DeleteVoteMutation, DeleteVoteMutationVariables>;
+export type DeleteMemeMutationFn = Apollo.MutationFunction<DeleteMemeMutation, DeleteMemeMutationVariables>;
 
 /**
- * __useDeleteVoteMutation__
+ * __useDeleteMemeMutation__
  *
- * To run a mutation, you first call `useDeleteVoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteVoteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteMemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMemeMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteVoteMutation, { data, loading, error }] = useDeleteVoteMutation({
+ * const [deleteMemeMutation, { data, loading, error }] = useDeleteMemeMutation({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useDeleteVoteMutation(baseOptions?: Apollo.MutationHookOptions<DeleteVoteMutation, DeleteVoteMutationVariables>) {
-        return Apollo.useMutation<DeleteVoteMutation, DeleteVoteMutationVariables>(DeleteVoteDocument, baseOptions);
+export function useDeleteMemeMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMemeMutation, DeleteMemeMutationVariables>) {
+        return Apollo.useMutation<DeleteMemeMutation, DeleteMemeMutationVariables>(DeleteMemeDocument, baseOptions);
       }
-export type DeleteVoteMutationHookResult = ReturnType<typeof useDeleteVoteMutation>;
-export type DeleteVoteMutationResult = Apollo.MutationResult<DeleteVoteMutation>;
-export type DeleteVoteMutationOptions = Apollo.BaseMutationOptions<DeleteVoteMutation, DeleteVoteMutationVariables>;
-export const CreateVoteDocument = gql`
-    mutation createVote($NFT: String!) {
-  createVote(NFT: $NFT) {
+export type DeleteMemeMutationHookResult = ReturnType<typeof useDeleteMemeMutation>;
+export type DeleteMemeMutationResult = Apollo.MutationResult<DeleteMemeMutation>;
+export type DeleteMemeMutationOptions = Apollo.BaseMutationOptions<DeleteMemeMutation, DeleteMemeMutationVariables>;
+export const CreateMemeDocument = gql`
+    mutation createMeme($name: String!) {
+  createMeme(name: $name) {
     NFT
+    name
     _id
   }
 }
     `;
-export type CreateVoteMutationFn = Apollo.MutationFunction<CreateVoteMutation, CreateVoteMutationVariables>;
+export type CreateMemeMutationFn = Apollo.MutationFunction<CreateMemeMutation, CreateMemeMutationVariables>;
 
 /**
- * __useCreateVoteMutation__
+ * __useCreateMemeMutation__
  *
- * To run a mutation, you first call `useCreateVoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateVoteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateMemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMemeMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createVoteMutation, { data, loading, error }] = useCreateVoteMutation({
+ * const [createMemeMutation, { data, loading, error }] = useCreateMemeMutation({
  *   variables: {
- *      NFT: // value for 'NFT'
+ *      name: // value for 'name'
  *   },
  * });
  */
-export function useCreateVoteMutation(baseOptions?: Apollo.MutationHookOptions<CreateVoteMutation, CreateVoteMutationVariables>) {
-        return Apollo.useMutation<CreateVoteMutation, CreateVoteMutationVariables>(CreateVoteDocument, baseOptions);
+export function useCreateMemeMutation(baseOptions?: Apollo.MutationHookOptions<CreateMemeMutation, CreateMemeMutationVariables>) {
+        return Apollo.useMutation<CreateMemeMutation, CreateMemeMutationVariables>(CreateMemeDocument, baseOptions);
       }
-export type CreateVoteMutationHookResult = ReturnType<typeof useCreateVoteMutation>;
-export type CreateVoteMutationResult = Apollo.MutationResult<CreateVoteMutation>;
-export type CreateVoteMutationOptions = Apollo.BaseMutationOptions<CreateVoteMutation, CreateVoteMutationVariables>;
-export const VoteDeletedDocument = gql`
-    subscription voteDeleted {
-  voteDeleted
+export type CreateMemeMutationHookResult = ReturnType<typeof useCreateMemeMutation>;
+export type CreateMemeMutationResult = Apollo.MutationResult<CreateMemeMutation>;
+export type CreateMemeMutationOptions = Apollo.BaseMutationOptions<CreateMemeMutation, CreateMemeMutationVariables>;
+export const MemeDeletedDocument = gql`
+    subscription memeDeleted {
+  memeDeleted
 }
     `;
 
 /**
- * __useVoteDeletedSubscription__
+ * __useMemeDeletedSubscription__
  *
- * To run a query within a React component, call `useVoteDeletedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useVoteDeletedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMemeDeletedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMemeDeletedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useVoteDeletedSubscription({
+ * const { data, loading, error } = useMemeDeletedSubscription({
  *   variables: {
  *   },
  * });
  */
-export function useVoteDeletedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<VoteDeletedSubscription, VoteDeletedSubscriptionVariables>) {
-        return Apollo.useSubscription<VoteDeletedSubscription, VoteDeletedSubscriptionVariables>(VoteDeletedDocument, baseOptions);
+export function useMemeDeletedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<MemeDeletedSubscription, MemeDeletedSubscriptionVariables>) {
+        return Apollo.useSubscription<MemeDeletedSubscription, MemeDeletedSubscriptionVariables>(MemeDeletedDocument, baseOptions);
       }
-export type VoteDeletedSubscriptionHookResult = ReturnType<typeof useVoteDeletedSubscription>;
-export type VoteDeletedSubscriptionResult = Apollo.SubscriptionResult<VoteDeletedSubscription>;
-export const VoteAddedDocument = gql`
-    subscription voteAdded {
-  voteAdded {
+export type MemeDeletedSubscriptionHookResult = ReturnType<typeof useMemeDeletedSubscription>;
+export type MemeDeletedSubscriptionResult = Apollo.SubscriptionResult<MemeDeletedSubscription>;
+export const MemeAddedDocument = gql`
+    subscription memeAdded {
+  memeAdded {
     _id
     NFT
+    name
   }
 }
     `;
 
 /**
- * __useVoteAddedSubscription__
+ * __useMemeAddedSubscription__
  *
- * To run a query within a React component, call `useVoteAddedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useVoteAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMemeAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMemeAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useVoteAddedSubscription({
+ * const { data, loading, error } = useMemeAddedSubscription({
  *   variables: {
  *   },
  * });
  */
-export function useVoteAddedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<VoteAddedSubscription, VoteAddedSubscriptionVariables>) {
-        return Apollo.useSubscription<VoteAddedSubscription, VoteAddedSubscriptionVariables>(VoteAddedDocument, baseOptions);
+export function useMemeAddedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<MemeAddedSubscription, MemeAddedSubscriptionVariables>) {
+        return Apollo.useSubscription<MemeAddedSubscription, MemeAddedSubscriptionVariables>(MemeAddedDocument, baseOptions);
       }
-export type VoteAddedSubscriptionHookResult = ReturnType<typeof useVoteAddedSubscription>;
-export type VoteAddedSubscriptionResult = Apollo.SubscriptionResult<VoteAddedSubscription>;
+export type MemeAddedSubscriptionHookResult = ReturnType<typeof useMemeAddedSubscription>;
+export type MemeAddedSubscriptionResult = Apollo.SubscriptionResult<MemeAddedSubscription>;

@@ -1,12 +1,9 @@
-import {
-  Vote,
-  Maybe
-} from '../generated/generated-types';
+import { Maybe, Meme } from '../generated/generated-types'
 
 export interface IAppState {
   votes: Maybe<
     {
-      __typename?: 'Vote' | undefined;
-    } & Pick<Vote, 'NFT' | '_id'>
-  >[];
+      __typename?: 'Meme' | undefined
+    } & Pick<Meme, '_id' | 'name' | 'NFT'>
+  >[]
 }
