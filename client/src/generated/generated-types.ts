@@ -47,6 +47,12 @@ export type MutationDeleteVoteArgs = {
   id: Scalars['String'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  voteAdded?: Maybe<Vote>;
+  voteDeleted?: Maybe<Scalars['String']>;
+};
+
 export type MyVotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -79,6 +85,25 @@ export type CreateVoteMutation = (
     { __typename?: 'Vote' }
     & Pick<Vote, 'NFT' | '_id'>
   ) }
+);
+
+export type VoteDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type VoteDeletedSubscription = (
+  { __typename?: 'Subscription' }
+  & Pick<Subscription, 'voteDeleted'>
+);
+
+export type VoteAddedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type VoteAddedSubscription = (
+  { __typename?: 'Subscription' }
+  & { voteAdded?: Maybe<(
+    { __typename?: 'Vote' }
+    & Pick<Vote, '_id' | 'NFT'>
+  )> }
 );
 
 
@@ -178,3 +203,58 @@ export function useCreateVoteMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateVoteMutationHookResult = ReturnType<typeof useCreateVoteMutation>;
 export type CreateVoteMutationResult = Apollo.MutationResult<CreateVoteMutation>;
 export type CreateVoteMutationOptions = Apollo.BaseMutationOptions<CreateVoteMutation, CreateVoteMutationVariables>;
+export const VoteDeletedDocument = gql`
+    subscription voteDeleted {
+  voteDeleted
+}
+    `;
+
+/**
+ * __useVoteDeletedSubscription__
+ *
+ * To run a query within a React component, call `useVoteDeletedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useVoteDeletedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVoteDeletedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useVoteDeletedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<VoteDeletedSubscription, VoteDeletedSubscriptionVariables>) {
+        return Apollo.useSubscription<VoteDeletedSubscription, VoteDeletedSubscriptionVariables>(VoteDeletedDocument, baseOptions);
+      }
+export type VoteDeletedSubscriptionHookResult = ReturnType<typeof useVoteDeletedSubscription>;
+export type VoteDeletedSubscriptionResult = Apollo.SubscriptionResult<VoteDeletedSubscription>;
+export const VoteAddedDocument = gql`
+    subscription voteAdded {
+  voteAdded {
+    _id
+    NFT
+  }
+}
+    `;
+
+/**
+ * __useVoteAddedSubscription__
+ *
+ * To run a query within a React component, call `useVoteAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useVoteAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVoteAddedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useVoteAddedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<VoteAddedSubscription, VoteAddedSubscriptionVariables>) {
+        return Apollo.useSubscription<VoteAddedSubscription, VoteAddedSubscriptionVariables>(VoteAddedDocument, baseOptions);
+      }
+export type VoteAddedSubscriptionHookResult = ReturnType<typeof useVoteAddedSubscription>;
+export type VoteAddedSubscriptionResult = Apollo.SubscriptionResult<VoteAddedSubscription>;

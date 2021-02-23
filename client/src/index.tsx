@@ -3,19 +3,15 @@ import './index.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import App from './App'
 import reportWebVitals from './reportWebVitals'
 
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-
-const client = new ApolloClient({
-  uri: process.env.NODE_ENV !== 'production' ? 'http://localhost:4000':'https://phibar-graphql-demo-server.herokuapp.com',
-  cache: new InMemoryCache()
-})
+import App from './components/app/app'
+import { ApolloProvider } from '@apollo/client'
+import { apolloClient } from './services/apollo-client'
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <App />
     </ApolloProvider>
   </React.StrictMode>,

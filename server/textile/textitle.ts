@@ -4,15 +4,13 @@ import { Client, CollectionConfig, PrivateKey, ThreadID } from '@textile/hub'
 export default class Textile {
   async deleteVote(id: string): Promise<string> {
     await this.client.delete(this.threadId, 'Vote', [id])
-    return 'sucess'
+    return id
   }
   async createVote(NFT: string): Promise<Vote> {
-    const vote = { NFT }
-    console.log(vote)
-
+    const vote: Vote = { _id: '', NFT }
     const ids = await this.client.create(this.threadId, 'Vote', [vote])
-    ;(vote as Vote)._id = ids[0]
-    return vote as Vote
+    vote._id = ids[0]
+    return vote
   }
   async get<T>(collectionName: string): Promise<T[]> {
     return await this.client.find(this.threadId, collectionName, {})

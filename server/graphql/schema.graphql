@@ -13,3 +13,8 @@ type Mutation {
   createVote(NFT: String!): Vote!
   deleteVote(id: String!): String
 }
+
+type Subscription {
+  voteAdded: Vote
+  voteDeleted: String
+}
