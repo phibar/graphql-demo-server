@@ -18,6 +18,8 @@ export type User = {
   _id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   wallet?: Maybe<Scalars['String']>;
+  memes?: Maybe<Array<Maybe<Meme>>>;
+  votes?: Maybe<Array<Maybe<Vote>>>;
 };
 
 export type Meme = {
@@ -25,13 +27,16 @@ export type Meme = {
   _id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   owner?: Maybe<User>;
-  NFT?: Maybe<Scalars['String']>;
+  nft?: Maybe<Scalars['String']>;
+  votes?: Maybe<Array<Maybe<Vote>>>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 export type Vote = {
   __typename?: 'Vote';
   _id: Scalars['String'];
-  NFT: Scalars['String'];
+  meme: Meme;
+  user: User;
 };
 
 export type Query = {
@@ -153,6 +158,7 @@ export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<User>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Meme: ResolverTypeWrapper<Meme>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   Vote: ResolverTypeWrapper<Vote>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -165,6 +171,7 @@ export type ResolversParentTypes = ResolversObject<{
   User: User;
   String: Scalars['String'];
   Meme: Meme;
+  Float: Scalars['Float'];
   Vote: Vote;
   Query: {};
   Mutation: {};
@@ -176,6 +183,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   _id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   wallet?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  memes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Meme']>>>, ParentType, ContextType>;
+  votes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Vote']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -183,13 +192,16 @@ export type MemeResolvers<ContextType = any, ParentType extends ResolversParentT
   _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owner?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  NFT?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  nft?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  votes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Vote']>>>, ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type VoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Vote'] = ResolversParentTypes['Vote']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  NFT?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  meme?: Resolver<ResolversTypes['Meme'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

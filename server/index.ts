@@ -1,5 +1,4 @@
 import { resolvers } from './graphql/resolvers'
-import { createDatabase } from './textile/create-database'
 import { ApolloServer, PubSub } from 'apollo-server'
 import { schema } from './graphql/schema-loader'
 
@@ -11,8 +10,7 @@ dotenv.config()
 const pubsub = new PubSub()
 
 Textile.Instance().then(async (t) => {
-  await t.reset()
-  await createDatabase(t)
+
 
   const server = new ApolloServer({
     typeDefs: schema,

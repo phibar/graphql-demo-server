@@ -37,8 +37,7 @@ export const resolvers = (pubsub: PubSub): Resolvers<Textile> => {
       }
     },
     Meme: {
-      owner: async (parent:any, args, context) =>  await context.getOwner(parent.ownerId)
-      
+      owner: async (parent, args, context) => await context.getOwner(parent.owner?._id)
     }
   }
 }

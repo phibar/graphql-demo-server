@@ -2,18 +2,23 @@ type User {
   _id: String
   name: String
   wallet: String
+  memes: [Meme]
+  votes: [Vote]
 }
 
 type Meme {
   _id: String!
   name: String
   owner: User
-  NFT: String
+  nft: String
+  votes:[Vote]
+  price: Float
 }
 
 type Vote {
   _id: String!
-  NFT: String!
+  meme: Meme!
+  user: User!
 }
 
 type Query {
