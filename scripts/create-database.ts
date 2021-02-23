@@ -162,6 +162,6 @@ const createDatabase = async (textile: Textile) => {
 
 dotenv.config()
 Textile.Instance().then(async (t) => {
-  t = await t.reset(true)
+  t = await t.reset()
   await createDatabase(t)
 })
