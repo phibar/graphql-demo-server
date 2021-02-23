@@ -1,10 +1,9 @@
-import { schema } from './../server/graphql/schema-loader'
 import { getIntrospectionQuery, graphqlSync, IntrospectionQuery } from 'graphql'
-import Textile from '../server/textile/textitle'
+import Textile from '../textile/textitle'
 
 import { fromIntrospectionQuery } from 'graphql-2-json-schema'
 import { JSONSchema4 } from 'json-schema'
-import { graphQlSchema } from '../server/graphql/schema-loader'
+import { graphQlSchema } from '../graphql/schema-loader'
 import { isArray } from 'lodash'
 import dotenv from 'dotenv'
 

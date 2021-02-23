@@ -6,7 +6,7 @@
   "scripts": {
     "generate": "npm run generate:graphql && npm run generate:textile",
     "generate:graphql": "graphql-codegen",
-    "generate:textile": "ts-node -r dotenv/config ./scripts/create-database.ts",
+    "generate:textile": "ts-node -r dotenv/config ./server/scripts/create-database.ts",
     "start": "node dist/index.js",
     "dev": "ts-node -r dotenv/config ./server/index.ts",
     "dev:watch": "nodemon",
