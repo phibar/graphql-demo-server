@@ -15,7 +15,18 @@ export type Scalars = {
 
 export type User = {
   __typename?: 'User';
-  _id?: Maybe<Scalars['String']>;
+  _id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  wallet?: Maybe<Scalars['String']>;
+  memes?: Maybe<Array<Maybe<Meme>>>;
+  votes?: Maybe<Array<Maybe<Vote>>>;
+};
+
+export type ReferenceInput = {
+  _id: Scalars['String'];
+};
+
+export type UserCreateInput = {
   name?: Maybe<Scalars['String']>;
   wallet?: Maybe<Scalars['String']>;
 };
@@ -24,13 +35,29 @@ export type Meme = {
   __typename?: 'Meme';
   _id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
-  NFT?: Maybe<Scalars['String']>;
+  owner?: Maybe<User>;
+  nft?: Maybe<Scalars['String']>;
+  votes?: Maybe<Array<Maybe<Vote>>>;
+  price?: Maybe<Scalars['Float']>;
+};
+
+export type MemeCreateInput = {
+  name?: Maybe<Scalars['String']>;
+  owner?: Maybe<ReferenceInput>;
+  nft?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 export type Vote = {
   __typename?: 'Vote';
   _id: Scalars['String'];
-  NFT: Scalars['String'];
+  meme: Meme;
+  user: User;
+};
+
+export type VoteCreateInput = {
+  meme: ReferenceInput;
+  user: ReferenceInput;
 };
 
 export type Query = {
@@ -42,17 +69,41 @@ export type Query = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createMeme: Meme;
-  deleteMeme?: Maybe<Scalars['String']>;
+  createVote?: Maybe<Scalars['String']>;
+  createUser?: Maybe<Scalars['String']>;
+  createMeme?: Maybe<Scalars['String']>;
+  deleteMeme?: Maybe<Scalars['Boolean']>;
+  deleteUser?: Maybe<Scalars['Boolean']>;
+  deleteVote?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationCreateVoteArgs = {
+  vote: VoteCreateInput;
+};
+
+
+export type MutationCreateUserArgs = {
+  user: UserCreateInput;
 };
 
 
 export type MutationCreateMemeArgs = {
-  name: Scalars['String'];
+  meme: MemeCreateInput;
 };
 
 
 export type MutationDeleteMemeArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteVoteArgs = {
   id: Scalars['String'];
 };
 
@@ -69,7 +120,11 @@ export type MemesQuery = (
   { __typename?: 'Query' }
   & { memes?: Maybe<Array<Maybe<(
     { __typename?: 'Meme' }
-    & Pick<Meme, '_id' | 'name' | 'NFT'>
+    & Pick<Meme, '_id' | 'name'>
+    & { owner?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    )> }
   )>>> }
 );
 
@@ -84,16 +139,13 @@ export type DeleteMemeMutation = (
 );
 
 export type CreateMemeMutationVariables = Exact<{
-  name: Scalars['String'];
+  meme: MemeCreateInput;
 }>;
 
 
 export type CreateMemeMutation = (
   { __typename?: 'Mutation' }
-  & { createMeme: (
-    { __typename?: 'Meme' }
-    & Pick<Meme, 'NFT' | 'name' | '_id'>
-  ) }
+  & Pick<Mutation, 'createMeme'>
 );
 
 export type MemeDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
@@ -111,7 +163,7 @@ export type MemeAddedSubscription = (
   { __typename?: 'Subscription' }
   & { memeAdded?: Maybe<(
     { __typename?: 'Meme' }
-    & Pick<Meme, '_id' | 'NFT' | 'name'>
+    & Pick<Meme, '_id' | 'name'>
   )> }
 );
 
@@ -121,7 +173,9 @@ export const MemesDocument = gql`
   memes {
     _id
     name
-    NFT
+    owner {
+      name
+    }
   }
 }
     `;
@@ -181,12 +235,8 @@ export type DeleteMemeMutationHookResult = ReturnType<typeof useDeleteMemeMutati
 export type DeleteMemeMutationResult = Apollo.MutationResult<DeleteMemeMutation>;
 export type DeleteMemeMutationOptions = Apollo.BaseMutationOptions<DeleteMemeMutation, DeleteMemeMutationVariables>;
 export const CreateMemeDocument = gql`
-    mutation createMeme($name: String!) {
-  createMeme(name: $name) {
-    NFT
-    name
-    _id
-  }
+    mutation createMeme($meme: MemeCreateInput!) {
+  createMeme(meme: $meme)
 }
     `;
 export type CreateMemeMutationFn = Apollo.MutationFunction<CreateMemeMutation, CreateMemeMutationVariables>;
@@ -204,7 +254,7 @@ export type CreateMemeMutationFn = Apollo.MutationFunction<CreateMemeMutation, C
  * @example
  * const [createMemeMutation, { data, loading, error }] = useCreateMemeMutation({
  *   variables: {
- *      name: // value for 'name'
+ *      meme: // value for 'meme'
  *   },
  * });
  */
@@ -244,7 +294,6 @@ export const MemeAddedDocument = gql`
     subscription memeAdded {
   memeAdded {
     _id
-    NFT
     name
   }
 }

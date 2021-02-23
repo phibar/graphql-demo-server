@@ -1,16 +1,20 @@
+import { PubSub } from 'apollo-server'
 import { Client, ThreadID } from '@textile/hub'
+import { v4 as uuid } from 'uuid'
 interface TextileCollection {
   _id: string
-  __typename?:string
+  __typename?: string
 }
 export default abstract class TextileRepository<T extends TextileCollection> {
   protected readonly collectionName: string
   protected readonly client: Client
   protected readonly threadId: ThreadID
-  constructor(name: string, client: Client, threadID: ThreadID) {
+  protected readonly pubSub: PubSub
+  constructor(name: string, client: Client, threadID: ThreadID, pubSub: PubSub) {
     this.collectionName = name
     this.client = client
     this.threadId = threadID
+    this.pubSub = pubSub
   }
 
   async all() {
@@ -34,11 +38,22 @@ export default abstract class TextileRepository<T extends TextileCollection> {
     }
   }
 
-  async create(t: Omit<T, '_id'|'__typename'>): Promise<string> {
+  async create(t: Omit<T, '_id' | '__typename'>): Promise<string> {
     return (await this.client.create(this.threadId, this.collectionName, [t]))[0]
   }
 
-  // async createMany(t: T[] | null): Promise<string[]> {
-  //   return await this.client.create(this.threadId, this.collectionName, t)
-  // }
+  private subscribe(filter: string) {
+    const trigger = uuid()
+    this.client.listen(this.threadId, [{ actionTypes: [filter], collectionName: this.collectionName }], (reply) =>
+      this.pubSub.publish(trigger, reply?.instance)
+    )
+    return this.pubSub.asyncIterator(trigger)
+  }
+  get subscribeCreate() {
+    return this.subscribe('CREATE')
+  }
+
+  get subscribeDelete() {
+    return this.subscribe('DELETE')
+  }
 }

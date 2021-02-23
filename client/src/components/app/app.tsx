@@ -32,7 +32,9 @@ function App() {
   }, [memeAdded])
 
   useEffect(() => {
-    memeDeleted && memeDeleted.memeDeleted && dispatch({ type: AppAction.MemeDeleted, payload: memeDeleted.memeDeleted })
+    memeDeleted &&
+      memeDeleted.memeDeleted &&
+      dispatch({ type: AppAction.MemeDeleted, payload: memeDeleted.memeDeleted })
   }, [memeDeleted])
 
   return (
@@ -52,7 +54,7 @@ function App() {
           </InputGroup>
           <Button
             onClick={() => {
-              newValue && createVoteMutation({ variables: { name: newValue } })
+              newValue && createVoteMutation({ variables: { meme: { name: newValue } } })
             }}
           >
             neu
@@ -66,7 +68,7 @@ function App() {
               {memesError && <ListGroupItem>{memesError.message}</ListGroupItem>}
               {appState?.votes.map((v) => (
                 <ListGroupItem key={v?._id}>
-                  <h5>{v?.NFT}</h5>
+                  <h5>{v?.name}</h5>
                   {v?._id}
                   <Button onClick={() => v && deleteVoteMutation({ variables: { id: v._id } })} variant="danger">
                     delete

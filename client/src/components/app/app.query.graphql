@@ -2,7 +2,9 @@ query Memes {
   memes {
     _id
     name
-    NFT
+    owner {
+      name
+    }
   }
 }
 
@@ -10,22 +12,16 @@ mutation deleteMeme($id: String!) {
   deleteMeme(id: $id)
 }
 
-mutation createMeme($name: String!) {
-  createMeme(name: $name) {
-    NFT
-    name
-    _id
-  }
+mutation createMeme($meme: MemeCreateInput!) {
+  createMeme(meme: $meme)
 }
 
 subscription memeDeleted {
   memeDeleted
 }
-
 subscription memeAdded {
   memeAdded {
     _id
-    NFT
     name
   }
 }

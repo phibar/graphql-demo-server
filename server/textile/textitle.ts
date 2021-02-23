@@ -1,5 +1,5 @@
+import { PubSub } from 'apollo-server'
 import { Client, CollectionConfig, PrivateKey, ThreadID } from '@textile/hub'
-import TextileRepository from './repositories/textile-repository'
 
 export default class Textile {
   private static instance: Textile
@@ -14,7 +14,7 @@ export default class Textile {
 
     const threadId = await this.createThreadIfNotExists(client)
     const collections = (await client.listCollections(threadId)).map((x) => x.name)
-    this.instance = new Textile(client, threadId, collections)
+    this.instance = new Textile(client, threadId, collections, new PubSub())
   }
 
   private static async createThreadIfNotExists(client: Client) {
@@ -39,18 +39,20 @@ export default class Textile {
   private client: Client
   private threadId: ThreadID
   private collections: string[]
+  private pubSub: PubSub
 
-  private constructor(client: Client, threadId: ThreadID, collections: string[]) {
+  private constructor(client: Client, threadId: ThreadID, collections: string[], pubSub: PubSub) {
     this.client = client
     this.threadId = threadId
     this.collections = collections
+    this.pubSub = pubSub
   }
 
-  getRepository<T extends new (name: string, client: Client, threadID: ThreadID) => TextileRepository<any>>(
+  getRepository<T extends new (name: string, client: Client, threadID: ThreadID, pubSub: PubSub) => InstanceType<T>>(
     constructor: T,
     name: string
   ) {
-    return new constructor(name, this.client, this.threadId)
+    return new constructor(name, this.client, this.threadId, this.pubSub)
   }
 
   async newCollection(collectionConfig: CollectionConfig) {
