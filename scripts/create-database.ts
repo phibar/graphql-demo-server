@@ -1,3 +1,4 @@
+import { schema } from './../server/graphql/schema-loader'
 import { getIntrospectionQuery, graphqlSync, IntrospectionQuery } from 'graphql'
 import Textile from '../server/textile/textitle'
 
@@ -23,7 +24,9 @@ const createCollections = async (
   }
 ) => {
   for (let key of Object.keys(definitions)) {
-    if (key === 'Subscription') continue // Remove hack
+    //Remove Hacks
+    if (key === 'Subscription') continue 
+    if (key.includes("Input")) continue 
     const entity = definitions[key] as JSONSchema4
     await textile.newCollection({ name: key, schema: entity })
   }
@@ -45,7 +48,6 @@ const convertToTextileSchema = (schema: JSONSchema4) => {
 
   relations.forEach((relation) => {
     const entity = map.get(relation.entity) as JSONSchema4
-    const refEntity = map.get(relation.refEntity) as JSONSchema4
     switch (relation.type) {
       case ReferenceType.OneToOne:
         entity[relation.fieldName] = { type: 'object', properties: { _id: { type: 'string' } } }

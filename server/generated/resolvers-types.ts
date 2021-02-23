@@ -15,11 +15,21 @@ export type Scalars = {
 
 export type User = {
   __typename?: 'User';
-  _id?: Maybe<Scalars['String']>;
+  _id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   wallet?: Maybe<Scalars['String']>;
   memes?: Maybe<Array<Maybe<Meme>>>;
   votes?: Maybe<Array<Maybe<Vote>>>;
+};
+
+/** Test */
+export type ReferenceInput = {
+  _id: Scalars['String'];
+};
+
+export type UserCreateInput = {
+  name?: Maybe<Scalars['String']>;
+  wallet?: Maybe<Scalars['String']>;
 };
 
 export type Meme = {
@@ -32,11 +42,23 @@ export type Meme = {
   price?: Maybe<Scalars['Float']>;
 };
 
+export type MemeCreateInput = {
+  name?: Maybe<Scalars['String']>;
+  owner?: Maybe<ReferenceInput>;
+  nft?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Float']>;
+};
+
 export type Vote = {
   __typename?: 'Vote';
   _id: Scalars['String'];
   meme: Meme;
   user: User;
+};
+
+export type VoteCreateInput = {
+  meme: ReferenceInput;
+  user: ReferenceInput;
 };
 
 export type Query = {
@@ -48,25 +70,41 @@ export type Query = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createVote?: Maybe<Scalars['String']>;
   createUser?: Maybe<Scalars['String']>;
   createMeme?: Maybe<Scalars['String']>;
-  deleteMeme?: Maybe<Scalars['String']>;
+  deleteMeme?: Maybe<Scalars['Boolean']>;
+  deleteUser?: Maybe<Scalars['Boolean']>;
+  deleteVote?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationCreateVoteArgs = {
+  vote: VoteCreateInput;
 };
 
 
 export type MutationCreateUserArgs = {
-  name?: Maybe<Scalars['String']>;
-  wallet?: Maybe<Scalars['String']>;
+  user: UserCreateInput;
 };
 
 
 export type MutationCreateMemeArgs = {
-  name: Scalars['String'];
-  ownerId?: Maybe<Scalars['String']>;
+  meme: MemeCreateInput;
 };
 
 
 export type MutationDeleteMemeArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteVoteArgs = {
   id: Scalars['String'];
 };
 
@@ -157,30 +195,38 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<User>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  ReferenceInput: ReferenceInput;
+  UserCreateInput: UserCreateInput;
   Meme: ResolverTypeWrapper<Meme>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  MemeCreateInput: MemeCreateInput;
   Vote: ResolverTypeWrapper<Vote>;
+  VoteCreateInput: VoteCreateInput;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
-  Subscription: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Subscription: ResolverTypeWrapper<{}>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   User: User;
   String: Scalars['String'];
+  ReferenceInput: ReferenceInput;
+  UserCreateInput: UserCreateInput;
   Meme: Meme;
   Float: Scalars['Float'];
+  MemeCreateInput: MemeCreateInput;
   Vote: Vote;
+  VoteCreateInput: VoteCreateInput;
   Query: {};
   Mutation: {};
-  Subscription: {};
   Boolean: Scalars['Boolean'];
+  Subscription: {};
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
-  _id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   wallet?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   memes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Meme']>>>, ParentType, ContextType>;
@@ -212,9 +258,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  createUser?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, never>>;
-  createMeme?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateMemeArgs, 'name'>>;
-  deleteMeme?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDeleteMemeArgs, 'id'>>;
+  createVote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateVoteArgs, 'vote'>>;
+  createUser?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'user'>>;
+  createMeme?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateMemeArgs, 'meme'>>;
+  deleteMeme?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteMemeArgs, 'id'>>;
+  deleteUser?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+  deleteVote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteVoteArgs, 'id'>>;
 }>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{

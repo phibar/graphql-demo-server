@@ -1,3 +1,4 @@
+import { ResolverContext } from './graphql/resolver-context'
 import { resolvers } from './graphql/resolvers'
 import { ApolloServer, PubSub } from 'apollo-server'
 import { schema } from './graphql/schema-loader'
@@ -10,14 +11,12 @@ dotenv.config()
 const pubsub = new PubSub()
 
 Textile.Instance().then(async (t) => {
-
-
   const server = new ApolloServer({
     typeDefs: schema,
     resolvers: resolvers(pubsub),
     introspection: true,
     playground: true,
-    context: t,
+    context: new ResolverContext(t),
     tracing: true
   })
 

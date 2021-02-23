@@ -1,33 +1,21 @@
-import { Meme, User, Vote } from './../generated/resolvers-types'
 import { Client, CollectionConfig, PrivateKey, ThreadID } from '@textile/hub'
+import TextileRepository from './repositories/textile-repository'
 
 export default class Textile {
-  async createUser(name: string | null | undefined, wallet: string | null | undefined) {
-    const user = { name, wallet }
-    const ids = await this.client.create(this.threadId, 'User', [user])
-    return ids[0]
-  }
-  async getOwner(_id: string | null | undefined): Promise<User | null> {
-    return _id
-      ? (await this.client.has(this.threadId, 'User', [_id]))
-        ? await this.client.findByID(this.threadId, 'User', _id)
-        : null
-      : null
-  }
-  async deleteMeme(id: string): Promise<string> {
-    await this.client.delete(this.threadId, 'Meme', [id])
-    return id
-  }
-  async createMeme(nft: string, ownerId: string | null | undefined): Promise<string> {
-    const meme: Meme = { _id: '', nft, owner: { _id: ownerId } }
-    const ids = await this.client.create(this.threadId, 'Meme', [meme])
-    return ids[0]
-  }
-  async get<T>(collectionName: string): Promise<T[]> {
-    return await this.client.find(this.threadId, collectionName, {})
-  }
-
   private static instance: Textile
+
+  private static async initInstance() {
+    const identity = PrivateKey.fromString(process.env.APP_IDENTITY || '')
+    const client = await Client.withKeyInfo({
+      key: process.env.APP_API_KEY || '',
+      secret: process.env.APP_API_SECRET || ''
+    })
+    await client.getToken(identity)
+
+    const threadId = await this.createThreadIfNotExists(client)
+    const collections = (await client.listCollections(threadId)).map((x) => x.name)
+    this.instance = new Textile(client, threadId, collections)
+  }
 
   private static async createThreadIfNotExists(client: Client) {
     const threadName = process.env.APP_THREAD_NAME || 'apollo-demo'
@@ -58,17 +46,11 @@ export default class Textile {
     this.collections = collections
   }
 
-  private static async initInstance() {
-    const identity = PrivateKey.fromString(process.env.APP_IDENTITY || '')
-    const client = await Client.withKeyInfo({
-      key: process.env.APP_API_KEY || '',
-      secret: process.env.APP_API_SECRET || ''
-    })
-    await client.getToken(identity)
-
-    const threadId = await this.createThreadIfNotExists(client)
-    const collections = (await client.listCollections(threadId)).map((x) => x.name)
-    this.instance = new Textile(client, threadId, collections)
+  getRepository<T extends new (name: string, client: Client, threadID: ThreadID) => TextileRepository<any>>(
+    constructor: T,
+    name: string
+  ) {
+    return new constructor(name, this.client, this.threadId)
   }
 
   async newCollection(collectionConfig: CollectionConfig) {
@@ -98,6 +80,7 @@ export default class Textile {
         await this.client.delete(this.threadId, c, ids)
         console.log(`delete collection ${c}`)
         await this.client.deleteCollection(this.threadId, c)
+        console.log(`truncate ${c} done`)
       }
     }
     this.collections = []

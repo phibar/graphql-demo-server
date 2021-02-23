@@ -1,9 +1,16 @@
 type User {
-  _id: String
+  _id: String!
   name: String
   wallet: String
   memes: [Meme]
   votes: [Vote]
+}
+input ReferenceInput {
+  _id: String!
+}
+input UserCreateInput {
+  name: String
+  wallet: String
 }
 
 type Meme {
@@ -11,7 +18,14 @@ type Meme {
   name: String
   owner: User
   nft: String
-  votes:[Vote]
+  votes: [Vote]
+  price: Float
+}
+
+input MemeCreateInput {
+  name: String
+  owner: ReferenceInput
+  nft: String
   price: Float
 }
 
@@ -21,6 +35,11 @@ type Vote {
   user: User!
 }
 
+input VoteCreateInput {
+  meme: ReferenceInput!
+  user: ReferenceInput!
+}
+
 type Query {
   votes: [Vote]
   users: [User]
@@ -28,9 +47,13 @@ type Query {
 }
 
 type Mutation {
-  createUser(name: String, wallet: String): String
-  createMeme(name: String!, ownerId: String): String
-  deleteMeme(id: String!): String
+  createVote(vote: VoteCreateInput!): String
+  createUser(user: UserCreateInput!): String
+  createMeme(meme: MemeCreateInput!): String
+
+  deleteMeme(id: String!): Boolean
+  deleteUser(id: String!): Boolean
+  deleteVote(id: String!): Boolean
 }
 
 type Subscription {
