@@ -5,13 +5,6 @@ type User {
   memes: [Meme]
   votes: [Vote]
 }
-input ReferenceInput {
-  _id: String!
-}
-input UserCreateInput {
-  name: String
-  wallet: String
-}
 
 type Meme {
   _id: String!
@@ -22,17 +15,26 @@ type Meme {
   price: Float
 }
 
+type Vote {
+  _id: String!
+  meme: Meme!
+  user: User!
+}
+
+input ReferenceInput {
+  _id: String!
+}
+
+input UserCreateInput {
+  name: String
+  wallet: String
+}
+
 input MemeCreateInput {
   name: String
   owner: ReferenceInput
   nft: String
   price: Float
-}
-
-type Vote {
-  _id: String!
-  meme: Meme!
-  user: User!
 }
 
 input VoteCreateInput {

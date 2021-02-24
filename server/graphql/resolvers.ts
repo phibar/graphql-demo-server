@@ -49,10 +49,14 @@ export const resolvers: Resolvers<ResolverContext> = {
   },
   Meme: {
     owner: async (parent, _args, c) => await c.User.getById(parent.owner?._id),
-    votes: async (parent, _args, c) => await (await c.Vote.all()).filter(x=>x.meme._id===parent._id)
+    votes: async (parent, _args, c) => await (await c.Vote.all()).filter((x) => x.meme._id === parent._id)
   },
   Vote: {
     meme: async (p, _a, c) => await (c.Meme.getById(p.meme._id) as Promise<Meme>),
     user: async (p, _a, c) => await (c.User.getById(p.user._id) as Promise<User>)
+  },
+  User: {
+    memes: async (p, _a, c) => (await c.Meme.all()).filter((x) => x.owner?._id === p._id),
+    votes: async (p, _a, c) => (await c.Vote.all()).filter((x) => x.user._id === p._id)
   }
 }
